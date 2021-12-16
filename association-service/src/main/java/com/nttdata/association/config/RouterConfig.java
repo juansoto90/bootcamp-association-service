@@ -12,9 +12,12 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @Configuration
 public class RouterConfig {
     @Bean
-    @LoadBalanced
     public RouterFunction<ServerResponse> routes(AssociationHandler handler){
         return route(GET("/association/{id}"), handler::findById)
-                .andRoute(POST("/association"), handler::create);
+                .andRoute(GET("/association/{accountNumber}/{status}"), handler::findByAccountNumberAndStatus)
+                .andRoute(GET("/association/card/{cardNumber}/{status}"), handler::findByCardNumberAndStatus)
+                .andRoute(GET("/association/{accountNumber}/{status}/{cardNumber}"), handler::findByAccountNumberAndStatusAndCardNumberNot)
+                .andRoute(POST("/association/credit-card"), handler::creditCardCreate)
+                .andRoute(POST("/association/debit-card"), handler::debitCardAccountAssociationCreate);
     }
 }
